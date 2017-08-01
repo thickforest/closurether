@@ -81,11 +81,13 @@ var stubCode = Read('asset/stub.js').
 exports.injectJs = function(url) {
 	// 注入页面的外链脚本
 	if (url == INJECT_URL) {
+        console.log("InjectJS main url : %s", url)
 		return INJECT_JS;
 	}
 
 	// 常用脚本库
 	if (url in jslib_map) {
+        console.log("InjectJS : %s", url)
 		return stubCode.replace('$URL_RAW', url);
 	}
 }
@@ -118,6 +120,7 @@ exports.injectHtml = function(html, charset, httpsPage) {
 	charset = charset ? charset.toLowerCase() : 'utf-8';
 
 	if (charset != 'utf-8') {
+        return html;    // 容易乱码,不会解决
 		html = iconv.decode(html, charset);
 	}
 	else {

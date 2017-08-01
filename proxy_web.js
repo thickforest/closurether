@@ -102,10 +102,11 @@ function proxyResponse(clientReq, clientRes, serverRes, secure) {
 		if (usrEnc) {
 			if (/gzip/i.test(usrEnc)) {
 				usrEnc = zlib.gzip;
-			}
-			else if (/deflate/i.test(usrEnc)) {
+			} else if (/deflate/i.test(usrEnc)) {
 				usrEnc = zlib.deflate;
-			}
+			} else {
+                usrEnc = null;
+            }
 		}
 
 		if (usrEnc) {
@@ -170,11 +171,13 @@ function proxyRequest(clientReq, clientRes) {
 
 	var fullUrl = (secure? 'https://' : 'http://') + url;
 
+    /*
 	console.log('[WEB] %s\t%s %s',
 		clientReq.connection.remoteAddress,
 		clientReq.method,
 		fullUrl
 	);
+    */
 
 	// 代理请求参数
 	var request = secure? https.request : http.request;
@@ -220,7 +223,8 @@ function onClientRequest(clientReq, clientRes) {
 	var js = inject.injectJs(url);
 	if (js) {
 		var data = new Buffer(js),
-			sec = 1,     // 非调试状态下使用更大的数字 （365 * 24 * 3600）
+			//sec = 1,     // 非调试状态下使用更大的数字 （365 * 24 * 3600）
+			sec = 365*24*3600,     // 非调试状态下使用更大的数字 （365 * 24 * 3600）
 			exp = new Date(Date.now() + sec * 1000),
 			now = new Date().toGMTString();
 

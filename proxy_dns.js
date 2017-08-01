@@ -93,7 +93,7 @@ server.on("message", function(msg, remoteEndPoint) {
 		web_look_tid[domain] = setTimeout(function() {
 			delete  web_look_tid[domain];
 			domain_type[domain] = TYPE_SVC;
-			console.log('[DNS] addSvcDomain:', domain);
+			// console.log('[DNS] addSvcDomain:', domain);
 		}, 10 * 1000);
 	}
 
@@ -105,7 +105,7 @@ server.on("message", function(msg, remoteEndPoint) {
 		remoteEndPoint.address
 	);
 
-	console.log('[DNS] %s\tQuery %s', remoteEndPoint.address, domain);
+	// console.log('[DNS] %s\tQuery %s', remoteEndPoint.address, domain);
 })
 
 
